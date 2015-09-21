@@ -2,6 +2,8 @@
 #include <wx/aboutdlg.h>
 #include "utils/RGBImage.hpp"
 #include <cmath>
+#include <gd.h>
+#include <utils/GDUtils.hpp>
 
 bool isPrime(int64_t x) {
     if(x <= 2){
@@ -30,17 +32,24 @@ MainFrame::MainFrame(wxWindow* parent)
     assert(isPrime(128) == false);
     assert(isPrime(3123*231) == false);
     
-    RGBImage rgbImage(1000, 1000);
-    for(int64_t y = 0; y < rgbImage.height(); ++y){
-        for(int64_t x = 0; x < rgbImage.width(); ++x){
-            int64_t index = 1000*1000*100 + x + y*rgbImage.width();
-            if(isPrime(index)){
-                rgbImage.setPixel(x, y, 0x00FF00);
-            } else {
-                rgbImage.setPixel(x, y, 0x000000);
-            }
+    gdImagePtr gdImagePtr = loadPng("somefile.png");
+    
+    for(int64_t y = 0; y < gdImagePtr->sy; ++y){
+        for(int64_t x = 0; x < gdImagePtr->sx; ++x){
+            uint32_t color = gdImagePtr->tpixels[y][x];
+            gdImagePtr->tpixels[y][x] = color*color;
         }
     }
+    
+    
+    RGBImage rgbImage(gdImagePtr->sx, gdImagePtr->sy);
+    for(int64_t y = 0; y < gdImagePtr->sy; ++y){
+        for(int64_t x = 0; x < gdImagePtr->sx; ++x){
+            uint32_t color = gdImagePtr->tpixels[y][x];
+            rgbImage.setPixel(x, y, color);
+        }
+    }
+    
     
     wxImage image(rgbImage.width(), rgbImage.height(), rgbImage.data());
     rgbImage.releaseOwnership();
