@@ -5,6 +5,43 @@
 
 #include <stdint.h>
 
+template<typename T>
+T clamp(T value, T min, T max){
+    if(value < min)
+        return min;
+    else if(value > max)
+        return max;
+    return value;
+}
+class Color {
+public:
+    float red;
+    float green;
+    float blue;
+    
+    uint32_t toInt(){
+        int red = this->red*255.0;
+        int green = this->green*255.0;
+        int blue = this->blue*255.0;
+        
+        red = clamp<int>(red, 0, 0xFF);
+        green = clamp<int>(green, 0, 0xFF);
+        blue = clamp<int>(blue, 0, 0xFF);
+        
+        uint32_t color = (red) | (green << 8) | (blue << 16);
+        return color;
+    }
+    
+    Color(uint32_t color){
+        red = color & 0xFF;
+        green = (color >> 8) & 0xFF;
+        blue = (color >> 16) & 0xFF;
+        
+        red /= 255.0f;
+        green /= 255.0f;
+        blue /= 255.0f;
+    }
+};
 
 class RGBImage
 {

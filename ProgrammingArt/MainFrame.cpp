@@ -36,8 +36,10 @@ MainFrame::MainFrame(wxWindow* parent)
     
     for(int64_t y = 0; y < gdImagePtr->sy; ++y){
         for(int64_t x = 0; x < gdImagePtr->sx; ++x){
-            uint32_t color = gdImagePtr->tpixels[y][x];
-            gdImagePtr->tpixels[y][x] = color*color;
+            Color color((uint32_t)gdImagePtr->tpixels[y][x]);
+            color.red = color.green*color.green;
+            color.blue = color.green*color.blue;
+            gdImagePtr->tpixels[y][x] = color.toInt();
         }
     }
     
