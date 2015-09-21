@@ -3,14 +3,14 @@
 #include "utils/RGBImage.hpp"
 #include <cmath>
 
-bool isPrime(int x) {
+bool isPrime(int64_t x) {
     if(x <= 2){
         return true;
     }
     
-    int root = std::sqrt(x)+1;
+    int64_t root = std::sqrt(x)+1;
     
-    for(int i = 2; i < root; ++i){
+    for(int64_t i = 2; i < root; ++i){
         if((x % i) == 0){
             return false;
         }
@@ -20,10 +20,20 @@ bool isPrime(int x) {
 MainFrame::MainFrame(wxWindow* parent)
     : MainFrameBaseClass(parent)
 {
+    
+    assert(isPrime(7) == true);
+    assert(isPrime(3) == true);
+    assert(isPrime(2) == true);
+    assert(isPrime(2333) == true);
+    
+    assert(isPrime(8) == false);
+    assert(isPrime(128) == false);
+    assert(isPrime(3123*231) == false);
+    
     RGBImage rgbImage(1000, 1000);
-    for(int y = 0; y < rgbImage.height(); ++y){
-        for(int x = 0; x < rgbImage.width(); ++x){
-            int index = x + y*rgbImage.width();
+    for(int64_t y = 0; y < rgbImage.height(); ++y){
+        for(int64_t x = 0; x < rgbImage.width(); ++x){
+            int64_t index = 1000*1000*100 + x + y*rgbImage.width();
             if(isPrime(index)){
                 rgbImage.setPixel(x, y, 0x00FF00);
             } else {
