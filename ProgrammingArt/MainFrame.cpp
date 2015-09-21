@@ -1,15 +1,34 @@
 #include "MainFrame.h"
 #include <wx/aboutdlg.h>
 #include "utils/RGBImage.hpp"
+#include <cmath>
 
-
+bool isPrime(int x) {
+    if(x <= 2){
+        return true;
+    }
+    
+    int root = std::sqrt(x)+1;
+    
+    for(int i = 2; i < root; ++i){
+        if((x % i) == 0){
+            return false;
+        }
+    }
+    return true;
+}
 MainFrame::MainFrame(wxWindow* parent)
     : MainFrameBaseClass(parent)
 {
     RGBImage rgbImage(1000, 1000);
     for(int y = 0; y < rgbImage.height(); ++y){
         for(int x = 0; x < rgbImage.width(); ++x){
-            rgbImage.setPixel(x, y, x*y);
+            int index = x + y*rgbImage.width();
+            if(isPrime(index)){
+                rgbImage.setPixel(x, y, 0x00FF00);
+            } else {
+                rgbImage.setPixel(x, y, 0x000000);
+            }
         }
     }
     
