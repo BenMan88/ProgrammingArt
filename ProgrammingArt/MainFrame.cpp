@@ -4,6 +4,7 @@
 #include <cmath>
 #include <gd.h>
 #include <utils/GDUtils.hpp>
+#include <memory>
 
 bool isPrime(int64_t x) {
     if(x <= 2){
@@ -19,10 +20,37 @@ bool isPrime(int64_t x) {
     }
     return true;
 }
+
+std::shared_ptr<gdImage> makeGdImageSharedPtr(gdImagePtr image){
+    std::shared_ptr<gdImage> imagePtr(image, [](gdImagePtr imagePtr){
+       gdImageDestroy(imagePtr); 
+    });
+    return imagePtr;
+}
+
+void circleFractal(std::shared_ptr<gdImage> imagePtr, int cx, int cy, int radius){
+    if(radius < 10){
+        return;
+    }
+    gdImageEllipse(imagePtr.get(), cx, cy, radius*2, radius*2, 0x0000FF00);
+    
+    circleFractal(imagePtr, cx-radius, cy, radius/2);
+    circleFractal(imagePtr, cx+radius, cy, radius/2);
+    circleFractal(imagePtr, cx, cy+radius, radius/2);
+    circleFractal(imagePtr, cx, cy-radius, radius/2);
+}
+std::shared_ptr<gdImage> fractalTest(){
+    int width = 500;
+    int height = 500;
+    std::shared_ptr<gdImage> image = makeGdImageSharedPtr(gdImageCreateTrueColor(width, height));
+    circleFractal(image, width/2, height/2, 300);
+    
+    return image;
+}
+
 MainFrame::MainFrame(wxWindow* parent)
     : MainFrameBaseClass(parent)
 {
-    
     assert(isPrime(7) == true);
     assert(isPrime(3) == true);
     assert(isPrime(2) == true);
@@ -32,18 +60,10 @@ MainFrame::MainFrame(wxWindow* parent)
     assert(isPrime(128) == false);
     assert(isPrime(3123*231) == false);
     
-    gdImagePtr gdImagePtr = loadPng("somefile.png");
+    std::shared_ptr<gdImage> gdImagePtr = fractalTest();
+
     
-    for(int64_t y = 0; y < gdImagePtr->sy; ++y){
-        for(int64_t x = 0; x < gdImagePtr->sx; ++x){
-            Color color((uint32_t)gdImagePtr->tpixels[y][x]);
-            color.red = color.green*color.green;
-            color.blue = color.green*color.blue;
-            gdImagePtr->tpixels[y][x] = color.toInt();
-        }
-    }
-    
-    
+    // converts gdImagePtr to rgbImage
     RGBImage rgbImage(gdImagePtr->sx, gdImagePtr->sy);
     for(int64_t y = 0; y < gdImagePtr->sy; ++y){
         for(int64_t x = 0; x < gdImagePtr->sx; ++x){
@@ -51,6 +71,7 @@ MainFrame::MainFrame(wxWindow* parent)
             rgbImage.setPixel(x, y, color);
         }
     }
+    
     
     
     wxImage image(rgbImage.width(), rgbImage.height(), rgbImage.data());

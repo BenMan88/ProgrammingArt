@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <CodeLite_Project Name="ProgrammingArt" InternalType="GUI">
   <Plugins>
+    <Plugin Name="qmake">
+      <![CDATA[00010001N0005Debug000000000000]]>
+    </Plugin>
     <Plugin Name="CMakePlugin">
       <![CDATA[[{
   "name": "Debug",
@@ -13,9 +16,6 @@
   "parentProject": ""
  }]]]>
     </Plugin>
-    <Plugin Name="qmake">
-      <![CDATA[00010001N0005Debug000000000000]]>
-    </Plugin>
   </Plugins>
   <Description/>
   <Dependencies/>
@@ -24,10 +24,12 @@
     <File Name="MainFrame.cpp"/>
     <File Name="wxcrafter.cpp"/>
     <File Name="wxcrafter_bitmaps.cpp"/>
-    <File Name="utils/RGBImage.hpp"/>
-    <File Name="utils/RGBImage.cpp"/>
-    <File Name="utils/GDUtils.cpp"/>
-    <File Name="utils/GDUtils.hpp"/>
+    <VirtualDirectory Name="utils">
+      <File Name="utils/RGBImage.cpp"/>
+      <File Name="utils/RGBImage.hpp"/>
+      <File Name="utils/GDUtils.cpp"/>
+      <File Name="utils/GDUtils.hpp"/>
+    </VirtualDirectory>
   </VirtualDirectory>
   <VirtualDirectory Name="include">
     <File Name="MainFrame.h"/>
