@@ -1,1 +1,0 @@
-./Debug/main.cpp.o ./Debug/MainFrame.cpp.o ./Debug/wxcrafter.cpp.o ./Debug/wxcrafter_bitmaps.cpp.o ./Debug/utils_RGBImage.cpp.o ./Debug/utils_GDUtils.cpp.o
