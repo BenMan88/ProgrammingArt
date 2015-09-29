@@ -6,6 +6,10 @@
 #include <utils/GDUtils.hpp>
 #include <memory>
 
+inline double degreesToRadians(double degrees){
+    double radians = degrees*M_PI/180.0;
+    return radians;
+}
 bool isPrime(int64_t x) {
     if(x <= 2){
         return true;
@@ -39,12 +43,26 @@ void circleFractal(std::shared_ptr<gdImage> imagePtr, int cx, int cy, int radius
     circleFractal(imagePtr, cx, cy+radius, radius/2);
     circleFractal(imagePtr, cx, cy-radius, radius/2);
 }
-std::shared_ptr<gdImage> fractalTest(){
-    int width = 500;
-    int height = 500;
-    std::shared_ptr<gdImage> image = makeGdImageSharedPtr(gdImageCreateTrueColor(width, height));
-    circleFractal(image, width/2, height/2, 300);
+
+void treeFractal(std::shared_ptr<gdImage> imagePtr, int startX, int startY, double angle, double length){
+    if(length < 1){
+        return;
+    }
+    int endX = cos(angle)*length + startX;
+    int endY = sin(angle)*length + startY;
     
+    gdImageLine(imagePtr.get(), startX, startY, endX, endY, 0x00FFFFFF);
+    
+    treeFractal(imagePtr, endX, endY, angle - degreesToRadians(-10), length*0.8);
+    treeFractal(imagePtr, endX, endY, angle + degreesToRadians(-10), length*0.8);
+}
+
+std::shared_ptr<gdImage> fractalTest(){
+    int width = 1000;
+    int height = 1000;
+    std::shared_ptr<gdImage> image = makeGdImageSharedPtr(gdImageCreateTrueColor(width, height));
+    //circleFractal(image, width/2, height/2, 300);
+    treeFractal(image, width/2, height-1, degreesToRadians(-90), 150);
     return image;
 }
 
