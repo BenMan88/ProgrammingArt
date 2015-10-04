@@ -14,8 +14,9 @@
 #include <wx/iconbndl.h>
 #include <wx/artprov.h>
 #include <wx/sizer.h>
-#include <wx/statbmp.h>
 #include <wx/panel.h>
+#include <wx/button.h>
+#include <wx/statbmp.h>
 #include <wx/menu.h>
 #include <wx/toolbar.h>
 #if wxVERSION_NUMBER >= 2900
@@ -28,8 +29,9 @@
 class MainFrameBaseClass : public wxFrame
 {
 protected:
-    wxStaticBitmap* m_outputBitmap;
     wxPanel* m_mainPanel;
+    wxButton* m_startBtn;
+    wxStaticBitmap* m_outputBitmap;
     wxMenuBar* m_menuBar;
     wxMenu* m_name6;
     wxMenuItem* m_menuItem7;
@@ -38,10 +40,12 @@ protected:
     wxToolBar* m_mainToolbar;
 
 protected:
+    virtual void onStart(wxCommandEvent& event) { event.Skip(); }
     virtual void OnExit(wxCommandEvent& event) { event.Skip(); }
     virtual void OnAbout(wxCommandEvent& event) { event.Skip(); }
 
 public:
+    wxButton* GetStartBtn() { return m_startBtn; }
     wxStaticBitmap* GetOutputBitmap() { return m_outputBitmap; }
     wxPanel* GetMainPanel() { return m_mainPanel; }
     wxMenuBar* GetMenuBar() { return m_menuBar; }

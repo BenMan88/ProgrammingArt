@@ -29,6 +29,8 @@
       <File Name="utils/RGBImage.hpp"/>
       <File Name="utils/GDUtils.cpp"/>
       <File Name="utils/GDUtils.hpp"/>
+      <File Name="utils/ThreadUtils.cpp"/>
+      <File Name="utils/ThreadUtils.hpp"/>
     </VirtualDirectory>
   </VirtualDirectory>
   <VirtualDirectory Name="include">
